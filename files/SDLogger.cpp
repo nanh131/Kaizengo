@@ -14,8 +14,13 @@ bool SDLogger::begin() {
 
   _ready = true;
   writeHeaderIfNeeded();
-  Serial.println(F("[SDLogger] The SD san sang."));
-  return true;
+ Serial.println("Đang khởi tạo thẻ MicroSD...");
+if (!SD.begin(SD_CS_PIN)) {
+    Serial.println("[CẢNH BÁO] Không nhận diện được thẻ SD! Vui lòng kiểm tra lại module.");
+    // Không dùng while(1) ở đây, cứ để nó chạy tiếp xuống dưới
+} else {
+    Serial.println("[OK] Khởi tạo thẻ SD thành công.");
+}
 }
 
 bool SDLogger::isReady() const {

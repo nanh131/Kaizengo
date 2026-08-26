@@ -96,10 +96,14 @@ void processIsolatedInputs() {
 }  // namespace
 
 void setup() {
-  Serial.begin(SERIAL_BAUD);
-  delay(300);
-  Serial.println();
-  Serial.println(F("=== ESP32-S3 CNC Wi-Fi Bridge ==="));
+  Serial.begin(115200);
+  
+  // THÊM ĐOẠN NÀY: Chờ cổng USB CDC khởi tạo trên máy tính
+  delay(3000); 
+  
+  Serial.println("\n=================================");
+  Serial.println("Bắt đầu khởi động ESP32-S3 Gateway");
+  Serial.println("=================================");
 
   inputs.begin();
   if (!logger.begin()) {

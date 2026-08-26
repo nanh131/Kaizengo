@@ -56,7 +56,25 @@ void WebInterface::begin(bool usingFallbackAp) {
   _server.on("/api/file/delete", HTTP_POST, [this]() { deleteFile(); });
   _server.onNotFound([this]() { notFound(); });
   _server.begin();
-  Serial.println(F("[Web] HTTP dashboard started."));
+  Serial.print("Đang kết nối Wi-Fi: ");
+Serial.println(WIFI_SSID);
+
+WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+uint32_t startAttemptTime = millis();
+
+// Thêm lệnh in dấu "." trong lúc chờ
+while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_CONNECT_TIMEOUT_MS) {
+    Serial.print(".");
+    delay(500);
+}
+
+if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\n[OK] Đã kết nối Wi-Fi thành công!");
+    Serial.print("ĐỊA CHỈ IP CỦA ESP32 LÀ: ");
+    Serial.println(WiFi.localIP());
+} else {
+    Serial.println("\n[LỖI] Kết nối Wi-Fi thất bại. Đang kích hoạt Fallback AP...");
+}
 }
 
 void WebInterface::handleClient() {
